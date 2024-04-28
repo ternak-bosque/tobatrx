@@ -7,7 +7,7 @@ export default function Home() {
 				<p className="text-5xl font-semibold">Token Bound Accounts on Tron</p>
 				<p className="text-xl py-8">Boost the User Experience of your NFT projects</p>
 
-				<Link href={"/"}>
+				<Link href={"/wallet"}>
 					<div className="box-home w-48 font-semibold border bg-purple-400 text-center rounded-md py-3 px-6">
 						<span>My NFTs</span>
 					</div>
