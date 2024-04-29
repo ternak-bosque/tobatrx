@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import { parseUnits } from "viem";
 import {
 	getTronWeb,
 	getWalletDetails,
@@ -65,6 +66,25 @@ const AppProvider = (props) => {
 		setAccountNfts(_accountNfts)
 	}
 
+	async function sendTokens({
+		contractAddress,
+		tokenAmount,
+		toAddress,
+		decimals
+	}){
+        // How many tokens?
+        let numberOfTokens = parseUnits(tokenAmount, decimals);
+		console.log(contractAddress, toAddress, numberOfTokens)
+    }
+
+    async function sendNFT(
+        contractAddress,
+        toAddress,
+        tokenId
+    ){ 
+        console.log(contractAddress, toAddress, tokenId)
+    }
+
 	const data = {
 		accountTokens,
 		accountInfo,
@@ -76,6 +96,8 @@ const AppProvider = (props) => {
 	const fn = {
 		setWalletDetails,
 		setCurrentTBA,
+		sendTokens,
+		sendNFT
 	}
 
 	return (
