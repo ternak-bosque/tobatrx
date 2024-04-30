@@ -306,6 +306,28 @@ export function addressToHex(addr) {
     return tronWeb.address.toHex(addr)
 }
 
+export async function getEncodedFunctionData(
+    contractAddress,
+    func,
+    parameters
+) {
+    try {
+        const {transaction} = await tronWeb.transactionBuilder.triggerSmartContract(
+            contractAddress,
+            func, 
+            {},
+            parameters
+        );
+
+        const data = transaction.raw_data.contract[0].parameter.value.data
+
+        return `0x${data}`
+    } catch (error) {
+        console.log(error, {contractAddress, func, parameters})
+        return "";
+    }
+}
+
 export async function tbaGetAddress(tokenContract, tokenId) {
     const contract = await tronWeb.contract(REGISTRY_ABI, REGISTRY_CONTRACT_ADDRESS);
     const tid = `${tokenContract}_${tokenId}`;

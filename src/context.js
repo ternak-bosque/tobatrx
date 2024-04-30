@@ -4,7 +4,11 @@ import {
 	getTronWeb,
 	getWalletDetails,
 	getAccountTokens,
+    getAccountInfo,
 	tbaGetAddress,
+	tbaExecute,
+	addressToHex,
+	getEncodedFunctionData,
     getAccountCollectiblesREST,
     formatAssetDataFromTronscan,
 } from './service';
@@ -74,7 +78,28 @@ const AppProvider = (props) => {
 	}){
         // How many tokens?
         let numberOfTokens = parseUnits(tokenAmount, decimals);
-		console.log(contractAddress, toAddress, numberOfTokens)
+
+		if (contractAddress) {
+			let encodedTransferData = await getEncodedFunctionData(
+				contractAddress,
+				"transfer(address,uint256)",
+				[
+					{type:'address', value:toAddress},
+					{type:'uint256', value:numberOfTokens}
+				]
+			)
+
+			//console.log(contractAddress, 0, encodedTransferData, currentTBA)
+			const req = await tbaExecute(contractAddress, 0, encodedTransferData, currentTBA)
+			showTxFeedback(req)
+			return req.transactionId
+		}
+		else {
+			//console.log(toAddressHex, numberOfTokens, "0x", currentTBA)
+			const req = await tbaExecute(toAddress, numberOfTokens, "0x", currentTBA)
+			showTxFeedback(req)
+			return req.transactionId
+		}
     }
 
     async function sendNFT(
@@ -82,8 +107,38 @@ const AppProvider = (props) => {
         toAddress,
         tokenId
     ){ 
-        console.log(contractAddress, toAddress, tokenId)
+        let fromAddress = currentTBA;
+    
+        try {			
+			let encodedTransferData = await getEncodedFunctionData(
+				contractAddress,
+				"transferFrom(address,address,uint256)",
+				[
+					{type:'address', value:fromAddress},
+					{type:'address', value:toAddress},
+					{type:'uint256', value:tokenId}
+				]
+			)
+
+            const req = await tbaExecute(contractAddress, 0, encodedTransferData, currentTBA)
+			showTxFeedback(req)
+			return req.transactionId
+        } catch (e) {
+            console.log(e)
+            return null;
+        }
     }
+
+	function showTxFeedback(req) {
+		// setTimeout(async () => {
+		// 	if (req.transactionId) {
+		// 		const txinfo = await window.tronWeb.trx.getTransactionInfo(req.transactionId);
+		// 		console.log(txinfo)
+		// 		const result = txinfo.receipt.result
+		// 		console.log(`The transaction ${txinfo.id} was ${result}`)
+		// 	}	
+		// }, 5000);
+	}
 
 	const data = {
 		accountTokens,
