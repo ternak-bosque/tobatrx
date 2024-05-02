@@ -17,6 +17,11 @@ export const trxToSun = (amount) => {
 	return amount*1000000
 }
 
+export const getUniqueTokenId = (data) => {
+    const { address:contractAddress, tokenId } = data
+    return `${contractAddress}_${tokenId}`
+}
+
 // gets an id string like the ones in Firebase
 export const pseudoRandId = () => {
     const CHARS =

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { IconHexagonLetterB } from "@tabler/icons-react";
-import { cardThemeColors } from "@/src/lib/myutils";
+import { cardThemeColors, getUniqueTokenId } from "@/src/lib/myutils";
 
 const withTokenBoundAccount = () => {
     return true
@@ -16,7 +16,7 @@ const NftCard = ({ nft }) => {
         symbol:collectionSymbol 
     } = nft;
 
-    let linkTo = `/token/${address}_${tokenId}`;
+    let linkTo = `/token/${getUniqueTokenId(nft)}`;
     let fallbackImg = "https://res.cloudinary.com/dy3hbcg2h/image/upload/v1652749173/no-image_qrq0kt.png";
     let { name:tokenName, image:tokenImg } = metadata
     let { address:tbaAddress, isDeployed } = nft.tba

@@ -3,6 +3,7 @@ import { formatAssetDataFromTronscan, getAccountTokens, getAccountTokensREST, ge
 import { useApp } from "@/src/context";
 import Header from "./header-card";
 import AccountAssets from "./account-assets";
+import { getUniqueTokenId } from "@/src/lib/myutils";
 
 
 const Token = ({ id }) => { 
@@ -19,14 +20,9 @@ const Token = ({ id }) => {
 	const [collectibles, setCollectibles] = useState([]);
 	const [assets, setAssets] = useState([]);
 
-    // useEffect(() => {
-    //     if (tokenAddress !== null)
-    //         setAccountData()
-    // }, [tokenAddress])
-
     useEffect(() => {
         if (accountNfts !== null) {
-            const _accountDetail = accountNfts.find(t => t.tokenId === tokenId)
+            const _accountDetail = accountNfts.find(t => getUniqueTokenId(t) === id)
             if (_accountDetail) {
                 setAccountDetail(_accountDetail)
                 setCurrentTBA(_accountDetail.tba.address)
@@ -80,11 +76,19 @@ const Token = ({ id }) => {
                     isTokenOwner={isTokenOwner}
                 />
 
-                <AccountAssets 
-                    tokens={assets} 
-                    nfts={collectibles} 
-                    balance={accountBalance}
-                />
+                {
+                    accountDetail.tba.isDeployed ? (
+                        <AccountAssets 
+                            tokens={assets} 
+                            nfts={collectibles} 
+                            balance={accountBalance}
+                        />
+                    ): (
+                        <div className="py-8 text-center text-gray-400 text-xl">
+                            No Account Deployed for this Token
+                        </div>
+                    )
+                }
             </div>
         </div>
     )

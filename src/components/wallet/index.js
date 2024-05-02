@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useApp } from "@/src/context";
-import { buttonStyle, splitHexAddress } from "@/src/lib/myutils";
+import { buttonStyle, getUniqueTokenId, splitHexAddress } from "@/src/lib/myutils";
 import { IconExternalLink } from "@tabler/icons-react";
 import NftCard from "../common/nft-card";
 
@@ -66,7 +66,7 @@ const Wallet = () => {
                 </div>
                 <div className="flex flex-wrap -mx-4">
                     {nfts.map((data) => (
-                        <NftCard key={data.tokenId} nft={data} />
+                        <NftCard key={getUniqueTokenId(data)} nft={data} />
                     ))}
                 </div>
             </div>

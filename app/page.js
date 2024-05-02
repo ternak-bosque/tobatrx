@@ -1,18 +1,28 @@
-import Link from "next/link";
+"use client"
+import Header from '@/src/components/landing/Header';
+import Landing from '@/src/components/landing/Landing';
+import Features from '@/src/components/landing/Features';
+import Demo from '@/src/components/landing/Demo';
+import Footer from '@/src/components/landing/Footer';
 
-export default function Home() {
-    return (
-        <main className="flex min-h-screen items-center justify-between p-24">
-            <div className="w-full h-96 flex flex-col items-center">
-				<p className="text-5xl font-semibold">Token Bound Accounts on Tron</p>
-				<p className="text-xl py-8">Boost the User Experience of your NFT projects</p>
+const Home = () => {
+  return (
+    <>
+      <div className="h-full leading-normal text-gray-600">
+        <div
+          className="absolute top-0 left-0 right-0 bg-no-repeat bg-cover shadow-lg -bottom-full brightness-90 filter md:bottom-0 md:bg-center md:brightness-100"
+          style={{
+            backgroundImage: "url('images/splash.jpg')",
+          }}
+        />
+        <Header />
+        <Landing />
+        <Features />
+        <Demo />
+        <Footer />
+      </div>
+    </>
+  );
+};
 
-				<Link href={"/wallet"}>
-					<div className="box-home w-48 font-semibold border bg-purple-400 text-center rounded-md py-3 px-6">
-						<span>My NFTs</span>
-					</div>
-				</Link>
-			</div>
-		</main>
-    );
-}
+export default Home;
