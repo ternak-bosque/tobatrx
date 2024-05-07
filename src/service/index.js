@@ -2,6 +2,7 @@ import axios from "axios";
 import TronWeb from "tronweb";
 import { REGISTRY_ABI, REGISTRY_CONTRACT_ADDRESS } from "../constants/registry";
 import { IMPLEMENTATION_ABI, IMPLEMENTATION_CONTRACT_ADDRESS } from "../constants/account";
+import { TRC721_ABI } from "../constants/trc721";
 
 const trongridBaseAPI = "https://nile.trongrid.io";
 const tronscanBaseAPI = "https://nileapi.tronscan.org";
@@ -407,5 +408,38 @@ export async function tbaExecute(to, value, data, tbaAddress) {
         return {
             err: true,
         };
+    }
+}
+
+export async function mintTestNFT(userAddress) {
+    const contractAddr = "TNJYzc441rr4u315ABYzNN5MZ8ExjAfqLV"
+    const contract = await tronWeb.contract().at(contractAddr);
+    
+    const totalSupply = await contract.totalSupply().call();
+    const tokenId = parseInt(totalSupply) + 1;
+    const tokenUri = "https://bafybeigwqojrthapgshssffz3iaauj2s3cq4coc4skycphwtimxmrphdje.ipfs.dweb.link"
+
+    try {
+        // const newMinter = await contract.addMinter(userAddress).send({ feeLimit: 100_000_000 })
+        // console.log(newMinter)
+
+        // const tweb = window.tronLink.tronWeb;
+        const result = await contract
+            .mintWithTokenURI(userAddress, tokenId, tokenUri)
+            .send({
+                feeLimit: 100_000_000
+            });
+        return {
+            error: false,
+            result: "SUCCESS",
+            txid: result,
+            tokenId
+        }
+    } catch (error) {
+        console.log(error)
+        return {
+            error: true,
+			result: "MINTING_ERROR"
+        }
     }
 }

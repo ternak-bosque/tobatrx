@@ -28,34 +28,47 @@ export default function Demo() {
           Aliquam ultrices sagittis orci a scelerisque purus. Ligula
           ullamcorper malesuada proin libero nunc consequat.
         </p> */}
-        <img
-          src="images/dinogame.jpg"
-          className="mt-8 rounded-xl"
-          alt="placeholder"
-        />
+        <a href="https://game.tobaontron.xyz" target="_blank">
+          <img
+            src="images/dinogame.jpg"
+            className="mt-8 rounded-xl"
+            alt="placeholder"
+          />
+        </a>
         <div className="grid grid-cols-1 grid-rows-1 gap-2 mt-4 md:auto-cols-auto md:grid-cols-3">
-          <div className="flex flex-col justify-between p-5 transition duration-500 border-2 shadow-md border-tranparent rounded-xl bg-purple-200 bg-opacity-30 hover:border-purple-300 hover:shadow-xl md:col-span-2">
+          <div className="flex flex-col justify-between p-5 transition duration-500 border-2 shadow-md border-tranparent rounded-xl bg-purple-200 bg-opacity-30 hover:border-purple-300 hover:shadow-xl">
             <div>
               <h3 className="text-lg font-medium text-gray-900">
-                The latest and greatest.
+                Connect your TronLink Wallet
               </h3>
               <p className="mt-1 text-gray-800 text-md">
-                Tortor dignissim convallis aenean et tortor at. At
-                ultrices mi tempus imperdiet nulla malesuada. Id
-                cursus metus aliquam eleifend mi. Quis ipsum
-                suspendisse ultrices gravida dictum fusce ut.
-                Adipiscing elit ut aliquam purus.
+                You can play without a wallet but if you want to
+                get a profile NFT and receive power-ups for your
+                character you'll need to have the TronLink extension
+                installed in your browser.
               </p>
             </div>
           </div>
           <div className="flex flex-col justify-between p-5 transition duration-500 border-2 shadow-md border-tranparent rounded-xl bg-purple-200 bg-opacity-30 hover:border-purple-300 hover:shadow-xl">
             <div>
               <h3 className="text-lg font-medium text-gray-900">
-                Mighty quick.
+                Mint your profile NFT
               </h3>
               <p className="mt-1 text-gray-800 text-md">
-                Sed elementum tempus egestas sed sed risus pretium
-                quam vulputate.
+                You would be able to mint a profile NFT after
+                successfully connect TronLink and click on the profile
+                button of the game's main section.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col justify-between p-5 transition duration-500 border-2 shadow-md border-tranparent rounded-xl bg-purple-200 bg-opacity-30 hover:border-purple-300 hover:shadow-xl">
+            <div>
+              <h3 className="text-lg font-medium text-gray-900">
+                Play and receive power-ups
+              </h3>
+              <p className="mt-1 text-gray-800 text-md">
+                Now play and get power-ups for your character by making high scores,
+                the receive them directly inside your profile NFT
               </p>
             </div>
           </div>

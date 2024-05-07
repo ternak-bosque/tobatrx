@@ -3,6 +3,7 @@ import { useApp } from "@/src/context";
 import { buttonStyle, getUniqueTokenId, splitHexAddress } from "@/src/lib/myutils";
 import { IconExternalLink } from "@tabler/icons-react";
 import NftCard from "../common/nft-card";
+import { mintTestNFT } from "@/src/service";
 
 const Wallet = () => {
     const [isConnecting, setIsConnecting] = useState(false);
@@ -27,6 +28,12 @@ const Wallet = () => {
 
     const nfts = accountNfts ? accountNfts : [];
     const address = accountInfo.address? accountInfo.address : "";
+
+    const doMint = async () => {
+        const result = await mintTestNFT(address);
+        console.log(result);
+        alert("NFT Minted")
+    }
 
     return status !== "connected" ? (
         <div className="text-center flex flex-col items-center justify-center">
@@ -64,6 +71,9 @@ const Wallet = () => {
                         </a>
                     </span>
                 </div>
+                <div className="w-full flex justify-end">
+                    
+                </div>
                 <div className="flex flex-wrap -mx-4">
                     {
                         accountNfts === null && (
@@ -74,8 +84,14 @@ const Wallet = () => {
                     }
                     {
                         accountNfts !== null && nfts.length === 0 && (
-                            <div className="w-full flex justify-center py-16 text-lg text-gray-400">
-                                No NFTs... Mint a Test NFT
+                            <div className="w-full flex flex-col items-center gap-3 justify-center py-16">
+                                <span className="text-lg text-gray-400">No NFTs... Mint a Test NFT</span>
+                                <button
+                                    className={buttonStyle("blue")}
+                                    onClick={() => doMint()}
+                                >
+                                    Mint Test NFT
+                                </button>
                             </div>
                         )
                     }
