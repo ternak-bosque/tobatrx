@@ -30,9 +30,13 @@ const Wallet = () => {
     const address = accountInfo.address? accountInfo.address : "";
 
     const doMint = async () => {
-        const result = await mintTestNFT(address);
-        console.log(result);
-        alert("NFT Minted")
+        const reqMint = [0,0,0].map((v, i) => mintTestNFT(address, i))
+        const mintResults = await Promise.all(reqMint)
+        console.log(mintResults);
+        alert("NFTs Minted")
+        setTimeout(() => {
+           window.location.reload() 
+        }, 1000);
     }
 
     return status !== "connected" ? (

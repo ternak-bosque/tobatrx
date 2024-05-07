@@ -411,12 +411,12 @@ export async function tbaExecute(to, value, data, tbaAddress) {
     }
 }
 
-export async function mintTestNFT(userAddress) {
+export async function mintTestNFT(userAddress, index) {
     const contractAddr = "TNJYzc441rr4u315ABYzNN5MZ8ExjAfqLV"
     const contract = await tronWeb.contract().at(contractAddr);
     
     const totalSupply = await contract.totalSupply().call();
-    const tokenId = parseInt(totalSupply) + 1;
+    const tokenId = parseInt(totalSupply) + 1 + index;
     const tokenUri = "https://bafybeigwqojrthapgshssffz3iaauj2s3cq4coc4skycphwtimxmrphdje.ipfs.dweb.link"
 
     try {
