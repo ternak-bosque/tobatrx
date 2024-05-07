@@ -5,31 +5,31 @@ export default function Demo() {
         <div className="transition duration-500 ease-in-out transform scale-100 translate-x-0 translate-y-0 opacity-100">
           <div className="mb-12 space-y-5 text-left md:mb-20 md:text-center">
             <div className="inline-block px-3 py-1 text-sm font-semibold rounded-lg bg-purple-100 bg-opacity-60 text-purple-500 hover:cursor-pointer hover:bg-opacity-80">
-              Product in Action
+              Standard in Action
             </div>
             <h1 className="text-3xl font-semibold text-gray-800 md:text-5xl">
-              Here's a demo
+              Play our mini game
             </h1>
             <p className="mx-auto text-xl md:w-2/3 md:text-2xl">
-              Talk a little bit about the product here and how it can
-              be revolutionary for the customer.
+              Experiment the utility of TBAs with our infinite runner, generate an NFT profile 
+              to play and receive all the power-ups inside of it.
             </p>
           </div>
         </div>
       </div>
       <div className="max-w-3xl px-8 mx-auto sm:px-6 lg:max-w-5xl lg:px-8">
-        <div className="inline-block px-3 py-1 text-sm rounded-lg bg-purple-100 bg-opacity-60 text-purple-500 hover:cursor-pointer hover:bg-opacity-80">
+        {/* <div className="inline-block px-3 py-1 text-sm rounded-lg bg-purple-100 bg-opacity-60 text-purple-500 hover:cursor-pointer hover:bg-opacity-80">
           Technology
         </div>
         <h2 className="mt-4 text-purple-800 text-3xl font-medium">
-          Built with Next.js & TailwindCSS
+          Built with PhaserJS
         </h2>
         <p className="mt-4 text-lg font-normal lg:max-w-3xl">
           Aliquam ultrices sagittis orci a scelerisque purus. Ligula
           ullamcorper malesuada proin libero nunc consequat.
-        </p>
+        </p> */}
         <img
-          src="images/product.png"
+          src="images/dinogame.jpg"
           className="mt-8 rounded-xl"
           alt="placeholder"
         />

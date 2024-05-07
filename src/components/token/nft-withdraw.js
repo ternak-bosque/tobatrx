@@ -144,11 +144,7 @@ const NftWithdraw = ({ nft }) => {
                     <div className="text-center">
                         <a
                             className="block text-sm"
-                            href={`${getBlockExplorerUrl(
-                                "currentChain.id",
-                                txid,
-                                false
-                            )}`}
+                            href={`${getBlockExplorerUrl(txid)}`}
                             target="_blank"
                         >
                             Transaction ongoing.{" "}

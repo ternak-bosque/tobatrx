@@ -44,6 +44,13 @@ const AccountAssets = ({ balance = 100000, tokens = [], nfts = [] }) => {
                     <span>Collectibles</span>
                 </h3>
                 <div className="w-full">
+                    {
+                        nfts.length === 0 && (
+                            <div className="w-full flex justify-center py-8">
+                                <div className="text-lg text-gray-400">No collectibles found</div>
+                            </div>
+                        ) 
+                    }
                     {nfts.map((data) => (
                         <NftItem key={data.tokenId} nft={data} />
                     ))}

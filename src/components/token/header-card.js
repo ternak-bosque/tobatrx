@@ -1,6 +1,7 @@
 import { cardThemeColors, getUITestData, toFixedIfNecessary } from "@/src/lib/myutils";
+import { IconCopy, IconExternalLink } from "@tabler/icons-react";
 
-const Header = ({ data, isTokenOwner }) => {
+const Header = ({ data, isTokenOwner, deployTBA }) => {
     const {
         address,
         name:collectionName,
@@ -13,7 +14,7 @@ const Header = ({ data, isTokenOwner }) => {
             image: tokenImage,
             name:tokenName
         },
-        tba:{isDeployed}
+        tba:{address:tbaAddress, isDeployed}
     } = data;
 
     return (
@@ -43,9 +44,21 @@ const Header = ({ data, isTokenOwner }) => {
                     </div>
                     <div className="flex gap-1 mt-2">
                         {isDeployed ? (
+                            <div>
                             <span className="inline-block px-2 py-1 leading-none bg-purple-200 text-purple-800 rounded-full font-semibold uppercase tracking-wide text-xs mr-1">
                                 Tokenbound
                             </span>
+                            <span className="block pl-1 pt-3 leading-none font-semibold tracking-wide text-xs mr-1">
+                                <a 
+                                    href={`https://nile.tronscan.org/#/address/${tbaAddress}`}
+                                    className="flex items-center gap-1"
+                                    target="_blank" 
+                                > 
+                                    {tbaAddress}
+                                    <IconCopy className="w-3 h-3" />
+                                </a>
+                            </span>
+                            </div>
                         ) : null}
                         {!isDeployed && !isTokenOwner ? (
                             <span className="inline-block px-2 py-1 leading-none bg-blue-200 text-blue-800 rounded-full font-semibold uppercase tracking-wide text-xs mr-1">
@@ -55,9 +68,13 @@ const Header = ({ data, isTokenOwner }) => {
                     </div>
                     <div className="mt-2">
                         {!isDeployed && isTokenOwner ? (
-                            <span className="inline-block px-3 py-2 leading-none bg-blue-200 text-blue-800 rounded-md font-semibold uppercase tracking-wide text-md mr-1">
+                            <button 
+                                type="button"
+                                onClick={() => deployTBA(address, tokenId)}
+                                className="inline-block px-3 py-2 leading-none bg-blue-200 text-blue-800 rounded-md font-semibold uppercase tracking-wide text-md mr-1"
+                            >
                                 Deploy TBA
-                            </span>
+                            </button>
                         ) : null}
                     </div>
                     

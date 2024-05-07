@@ -44,7 +44,7 @@ const Wallet = () => {
 
             <div className="flex items-center justify-center my-5">
                 <small className="block text-gray-400">
-                    {/* Currently on Testnet */}
+                    {/* Nile Testnet */}
                 </small>
             </div>
         </div>
@@ -65,6 +65,20 @@ const Wallet = () => {
                     </span>
                 </div>
                 <div className="flex flex-wrap -mx-4">
+                    {
+                        accountNfts === null && (
+                            <div className="w-full flex justify-center py-16">
+                                <div className="loader"></div>
+                            </div>
+                        ) 
+                    }
+                    {
+                        accountNfts !== null && nfts.length === 0 && (
+                            <div className="w-full flex justify-center py-16 text-lg text-gray-400">
+                                No NFTs... Mint a Test NFT
+                            </div>
+                        )
+                    }
                     {nfts.map((data) => (
                         <NftCard key={getUniqueTokenId(data)} nft={data} />
                     ))}

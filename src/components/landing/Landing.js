@@ -35,7 +35,7 @@ export default function Landing() {
               <div className="pt-4 text-sm text-gray-200 sm:pt-2 md:text-gray-600">
                 Easy with a few clicks
                 <br />
-                You'll enjoy the experience.
+                What about using your NFT as a Wallet?
               </div>
             </div>
           </div>
@@ -50,7 +50,7 @@ export default function Landing() {
           >
             <img
               className="transition duration-700 shadow-xl rounded-xl ring-1 ring-black ring-opacity-5 hover:transform hover:scale-105"
-              src="images/product.png"
+              src="images/tokenbound.jpg"
               alt="Product Image"
             />
           </a>

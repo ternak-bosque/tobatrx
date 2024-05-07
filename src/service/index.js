@@ -363,7 +363,8 @@ export async function tbaGetAddress(tokenContract, tokenId) {
 }
 
 export async function tbaCreateAccount(tokenContract, tokenId) {
-    const contract = await tronWeb.contract(REGISTRY_ABI, REGISTRY_CONTRACT_ADDRESS);
+    const tweb = window.tronLink.tronWeb;
+    const contract = await tweb.contract(REGISTRY_ABI, REGISTRY_CONTRACT_ADDRESS);
 
     try {
         const address = await contract.createAccount(
@@ -372,18 +373,16 @@ export async function tbaCreateAccount(tokenContract, tokenId) {
             MAINNET_ID,
             tokenContract,
             tokenId
-        ).call();
+        )
+        .send({
+            feeLimit: 1_000_000_000,
+        });
 
         const addressBase58 = tronWeb.address.fromHex(address);
-        
-        // verifies if there's a tba deployment for this account
-        const deployment = await tronWeb.trx.getContract(addressBase58)
-        console.log("deployment", addressBase58, deployment)
-
         return addressBase58;
     } catch (error) {
         console.log("smartcontract error", error);
-        return {};
+        return null;
     }
 }
 

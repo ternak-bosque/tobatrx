@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
-import { formatAssetDataFromTronscan, getAccountTokens, getAccountTokensREST, getNftInfoById, tbaGetAddress } from "@/src/service";
 import { useApp } from "@/src/context";
 import Header from "./header-card";
 import AccountAssets from "./account-assets";
 import { getUniqueTokenId } from "@/src/lib/myutils";
-
+import { 
+    formatAssetDataFromTronscan, 
+    getAccountTokensREST,
+    getAccountTokens, 
+    getNftInfoById, 
+    tbaGetAddress 
+} from "@/src/service";
 
 const Token = ({ id }) => { 
     const { 
         data: { accountNfts, currentTBA },
-        fn: { setCurrentTBA }
+        fn: { setCurrentTBA, deployTokenBoundAccount }
     } = useApp();
 
     const [tokenAddress, tokenId] = id.split("_");
@@ -65,7 +70,11 @@ const Token = ({ id }) => {
 	}
 
     if (!accountDetail) {
-        return <div></div>
+        return (
+            <div className="w-full flex justify-center py-16">
+                <div className="loader"></div>
+            </div>
+        ) 
     }
 
     return (
@@ -74,6 +83,7 @@ const Token = ({ id }) => {
                 <Header 
                     data={accountDetail} 
                     isTokenOwner={isTokenOwner}
+                    deployTBA={deployTokenBoundAccount}
                 />
 
                 {

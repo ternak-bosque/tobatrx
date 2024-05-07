@@ -62,6 +62,14 @@ export default function Header() {
               </li>
               <li>
                 <a
+                  href="#demo"
+                  className="text-lg text-white md:text-black hover:text-gray-300 md:hover:text-gray-700"
+                >
+                  Github
+                </a>
+              </li>
+              {/* <li>
+                <a
                   href="/"
                   className="bg-white rounded-full bg-opacity-40 px-4 text-lg text-white md:text-black shadow-sm transition-colors duration-75 group gap-[0.25em] inline-flex items-center py-1.5 hover:cursor-pointer hover:bg-opacity-90"
                 >
@@ -87,7 +95,7 @@ export default function Header() {
                     ></path>
                   </svg>
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

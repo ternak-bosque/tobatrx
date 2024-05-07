@@ -11,6 +11,7 @@ import {
 	getEncodedFunctionData,
     getAccountCollectiblesREST,
     formatAssetDataFromTronscan,
+	tbaCreateAccount,
 } from './service';
 
 
@@ -68,6 +69,19 @@ const AppProvider = (props) => {
 		});
 
 		setAccountNfts(_accountNfts)
+	}
+
+	async function deployTokenBoundAccount(tokenContract, tokenId) {
+		const _continue = confirm(`Do you want to create a Token-Bound Account for this NFT?`);
+		if (_continue) {
+			const tbaAddress = await tbaCreateAccount(tokenContract, tokenId)
+			if (tbaAddress !== null) {
+				alert("Account created!")
+			}
+			else {
+				alert("An error occurred!!")
+			}
+		}
 	}
 
 	async function sendTokens({
@@ -149,6 +163,7 @@ const AppProvider = (props) => {
 	}
 
 	const fn = {
+		deployTokenBoundAccount,
 		setWalletDetails,
 		setCurrentTBA,
 		sendTokens,
