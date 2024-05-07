@@ -1,0 +1,10 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#app {
+    height: 95vh !important;
+    width: 100% !important;
+}

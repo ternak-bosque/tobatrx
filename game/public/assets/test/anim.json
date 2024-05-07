@@ -1,0 +1,86 @@
+{
+    "anims": [
+        {
+            "key": "player-Running",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "player",
+                    "frame": "Running_000",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "player",
+                    "frame": "Running_001",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "player",
+                    "frame": "Running_002",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "player",
+                    "frame": "Running_003",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "player",
+                    "frame": "Running_004",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "player",
+                    "frame": "Running_005",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "player",
+                    "frame": "Running_006",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "player",
+                    "frame": "Running_007",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "player",
+                    "frame": "Running_008",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "player",
+                    "frame": "Running_009",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "player",
+                    "frame": "Running_010",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "player",
+                    "frame": "Running_011",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 30,
+            "skipMissedFrames": true,
+            "repeat": -1,
+            "showBeforeDelay": false
+        }
+    ]
+}

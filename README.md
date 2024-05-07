@@ -38,6 +38,11 @@ the user gains skills (represented as NFTs) they are transferred into it. This m
 player's profile status completely on-chain and it can be exchanged between different wallets
 without losing the progress of the game account.
 
+By integrating TBAs with NFTs, players can experience a new level of autonomy and
+interactivity, allowing them to trigger on-chain actions and unlock special features tied to
+their NFTs. This innovative approach not only enriches the gaming experience but also
+highlights the potential for leveraging TBAs in various use cases across different industries.
+
 ## Tronscan Contracts
 
 - [Registry](https://nile.tronscan.org/#/contract/TE4xFtwAikSNhVpk7DcDXzooEBhy2eXE3i)
