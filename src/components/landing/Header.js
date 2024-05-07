@@ -62,7 +62,8 @@ export default function Header() {
               </li>
               <li>
                 <a
-                  href="#demo"
+                  target="_blank"
+                  href="https://github.com/tobaproject/tobatrx"
                   className="text-lg text-white md:text-black hover:text-gray-300 md:hover:text-gray-700"
                 >
                   Github

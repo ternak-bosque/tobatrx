@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# TOBA - Token Bound Accounts on TRON Network
 
-## Getting Started
+Our current depployment is working on Nile testnet, check it here [https://tobaontron.xyz](https://tobaontron.xyz)
 
-First, run the development server:
+To test you will need the TronLink extension [https://www.tronlink.org/](https://www.tronlink.org/) and some TRX from this faucet [https://nileex.io/join/getJoinPage](https://nileex.io/join/getJoinPage)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Inspiration 
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+The inspiration behind the project to bring a new way to interact with NFTs on
+the TRON network was driven by the desire to expand the capabilities of these assets
+beyond traditional static collectibles. By introducing token-bound accounts for TRC-721
+assets, the project aimed to revolutionize the way users engage with NFTs, allowing for
+more dynamic and interactive experiences. The implementation of token-bound accounts not
+only enhances the functionality of NFTs but also opens up a myriad of possibilities for
+advanced use cases, unlocking a new realm of potential for these digital assets within the
+TRON ecosystem.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## What it does?
 
-## Learn More
+Following the recommendations of the ERC-6551 standard for the
+implementation of Token-Bound Accounts in Ethereum VM-compatible networks, contracts
+have been deployed to enable the creation and management of TBAs within the TRON
+blockchain, then, a dApp has been developed to facilitate the creation, management and
+administration of Token Bound Accounts using a friendly interface where users can interact
+directly with the assets within their NFTs, being able to transfer them to different accounts,
+either EOAs or TBAs.
 
-To learn more about Next.js, take a look at the following resources:
+Imagine transfer a group of assets just by doing one transaction, well, something like that is
+what happens when you send an NFT (who has a TBA) to another wallet, you are
+transferring the ownership of the TBA too, and in the practical sense you didn’t had to make
+X number of transactions to move all the assets, that’s the power of this implementation.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To demonstrate the practical application of Token Bound Accounts (TBA), we also
+developed a captivating mini-game that showcases the unique capabilities of TBAs within
+the TRON ecosystem. The mini-game creates the profiles as NFTs that have a TBA and as
+the user gains skills (represented as NFTs) they are transferred into it. This makes the
+player's profile status completely on-chain and it can be exchanged between different wallets
+without losing the progress of the game account.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Tronscan Contracts
 
-## Deploy on Vercel
+- [Registry](https://nile.tronscan.org/#/contract/TE4xFtwAikSNhVpk7DcDXzooEBhy2eXE3i)
+- [Account Implementation](https://nile.tronscan.org/#/contract/TYUBDqFuVxcxEJAYhC7FwwTrtffijWq6vh)
+- [NFT Game Profiles](https://nile.tronscan.org/#/contract/TFeL28QUB6e9tF3DzBSZcLcBuPoGW5PHxQ)
+- [NFT Game PowerUps](https://nile.tronscan.org/#/contract/TPKriX1NzJhvWkDYbHy1E3zNoyzdhWfJGw)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

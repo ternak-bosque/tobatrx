@@ -14,7 +14,7 @@ export default function Features() {
                 Awesome Utility
               </div>
               <h1 className="text-3xl font-semibold text-gray-100 md:text-5xl">
-                Decked with innovative usecases.
+                Implement innovative use cases.
               </h1>
               <p className="text-xl text-gray-200 md:text-2xl max-w-3xl mx-auto">
                 Any TRON dev can use the Token-Bound Accounts to <span className="font-semibold">generate</span>{' '}

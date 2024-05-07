@@ -73,7 +73,7 @@ const NftWithdraw = ({ nft }) => {
             <DialogTrigger>
                 <div
                     title="Send token"
-                    className="flex text-sm p-2 bg-purple-700 text-white rounded-md hover:bg-purple-500 focus:outline-none"
+                    className="flex text-sm p-2 bg-purple-900 text-white rounded-md hover:bg-purple-500 focus:outline-none"
                 >
                     <IconTransfer className="w-6 h-6"/>
                 </div>

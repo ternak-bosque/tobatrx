@@ -1,17 +1,15 @@
 const Navigation = () => {
     return (
-        <header className="z-10 fixed top-0 left-0 w-full py-3 text-slate-100 bg-purple-700 dark:bg-slate-900">
+        <header className="z-10 fixed top-0 left-0 w-full py-3 text-slate-100 bg-purple-900 dark:bg-slate-900">
             <div className="flex max-w-5xl w-full mx-auto">
-                <div className="w-full flex justify-center">
+                <a href="/" className="block w-full">
+                <div className="w-full flex justify-center items-center gap-2">
+                    <img src="/favico.png" alt="logo" className="w-8 h-8 rounded-md" />
                     <span className="font-mono text-xl font-bold">
                         Tokenbound Accounts
                     </span>
-                    {/* <img
-                        className="w-auto h-6 -ml-1"
-                        src="/nfc-tag-w.png"
-                        alt="App logo"
-                    /> */}
                 </div>
+                </a>
             </div>
         </header>
     );
