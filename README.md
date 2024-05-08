@@ -4,6 +4,7 @@ Our current depployment is working on Nile testnet, check it here [https://tobao
 
 To test you will need the TronLink extension [https://www.tronlink.org/](https://www.tronlink.org/) and some TRX from this faucet [https://nileex.io/join/getJoinPage](https://nileex.io/join/getJoinPage)
 
+[Forum Post](https://forum.trondao.org/t/toba-token-bound-accounts-on-tron/24226)
 
 ## Inspiration 
 
