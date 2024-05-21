@@ -57,13 +57,13 @@ const Token = ({ id }) => {
     async function setAccountData(tbaAddress) {
         const accountAssets = await getAccountTokensREST(tbaAddress);
         const assetsData = accountAssets.data.map(o => formatAssetDataFromTronscan(o)).filter(t => t.address !== "_")
-        //const tokensGrouped = Object.groupBy(assetsData, ({type}) => type)
+        const _accountTokens = assetsData.filter(t => t.type === "FUNGIBLE_COMMON")
         console.log(assetsData)
 
         const { accountTokens, accountNfts } = await getAccountTokens(assetsData.map(({address}) => address), tbaAddress);
-        setAssets(accountTokens);
+        setAssets(_accountTokens);
 		setCollectibles(accountNfts)
-		console.log(accountTokens, accountNfts)
+		console.log(_accountTokens, accountNfts)
 
         const balance = accountAssets.data[0].quantity;
         setAccountBalance(balance)

@@ -20,7 +20,14 @@ const NftItem = ({ nft }) => {
         <div className="flex justify-between items-center mt-3 bg-gray-100 border rounded-md px-3 py-2">
             <div className="flex gap-2">
                 <div>
-                    <img className="w-12 h-12 rounded-sm" src={tokenImg} alt={tokenName} />
+                    <img 
+                        className="w-12 h-12 rounded-sm" 
+                        src={tokenImg || fallbackImg}
+                        alt={tokenName}
+                        onError={(e) => {
+                            e.target.src = fallbackImg;
+                        }}
+                    />
                 </div>
                 <div className="grow leading-5 p-1">
 

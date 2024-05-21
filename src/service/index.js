@@ -228,7 +228,23 @@ export async function getNftInfoByOwnerIndex(contractAddr, holderAddr, index) {
     try {
         let tokenId = await contract.tokenOfOwnerByIndex(holderAddr, index).call();
         let tokenUri = await contract.tokenURI(tokenId).call();
-        let metadata = await (await fetch(tokenUri)).json();
+        let metadata = {};
+
+        if (tokenUri.startsWith('http') || tokenUri.startsWith('ipfs')) {
+            try {
+                metadata = await (await fetch(tokenUri)).json();
+            } catch (error) {
+                console.log('error getting metadata')
+            }
+        }
+        else {
+            // try {
+            //     metadata = await (await fetch(`https://ipfs.io/ipfs/${tokenUri}/${tokenId}`)).json();
+            // } catch (error) {
+            //     console.log('error getting metadata Q')
+            // }
+        }
+
         return {
             address: contractAddr,
             tokenId: tokenId.toString(),
@@ -237,7 +253,12 @@ export async function getNftInfoByOwnerIndex(contractAddr, holderAddr, index) {
         }   
     } catch (error) {
         console.log("error getting nft",error);
-        return {};
+        return {
+            address: contractAddr,
+            tokenId: 0,
+            tokenUri: "",
+            metadata: {}
+        };
     }
 }
 
@@ -247,7 +268,19 @@ export async function getNftInfoById(contractAddr, tokenId) {
         let name = await contract.name().call();
         let symbol = await contract.symbol().call();
         let tokenUri = await contract.tokenURI(tokenId).call();
-        let metadata = await (await fetch(tokenUri)).json();
+        
+        let metadata = {};
+        if (tokenUri.startsWith('http') || tokenUri.startsWith('ipfs')) {
+            try {
+                metadata = await (await fetch(tokenUri)).json();
+            } catch (error) {
+                console.log('error getting metadata')
+            }
+        }
+        else {
+            console.log("bad tokenUri format", tokenUri)
+        }
+
         return {
             type: "NON_FUNGIBLE_UNIQUE",
             address: contractAddr,
@@ -259,7 +292,15 @@ export async function getNftInfoById(contractAddr, tokenId) {
         }   
     } catch (error) {
         console.log("error getting nft",error);
-        return {};
+        return {
+            type: "NON_FUNGIBLE_UNIQUE",
+            address: contractAddr,
+            tokenId: tokenId.toString(),
+            tokenUr: "",
+            metadata: {},
+            symbol: "",
+            name: ""
+        }   
     }
 }
 

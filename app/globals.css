@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background-color: #e5e7eb;
+}
+
 .loader {
   width: fit-content;
   font-weight: bold;

@@ -21,6 +21,10 @@ const NftCard = ({ nft }) => {
     let { name:tokenName, image:tokenImg } = metadata
     let { address:tbaAddress, isDeployed } = nft.tba
 
+    if (!tokenName) {
+        tokenName = `${collectionSymbol} #${tokenId}`
+    }
+
     return (
         <div className="w-full sm:w-1/2 md:w-1/3 p-4">
             <Link href={linkTo}>
@@ -29,7 +33,7 @@ const NftCard = ({ nft }) => {
                     <div className="relative pb-48 overflow-hidden">
                         <img
                             className="absolute inset-0 h-full w-full object-contain"
-                            src={tokenImg}
+                            src={tokenImg || fallbackImg}
                             alt=""
                             onError={(e) => {
                                 e.target.src = fallbackImg;

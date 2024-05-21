@@ -2,10 +2,10 @@ import { cardThemeColors, getUITestData, toFixedIfNecessary } from "@/src/lib/my
 import { IconCopy, IconExternalLink } from "@tabler/icons-react";
 
 const Header = ({ data, isTokenOwner, deployTBA }) => {
-    const {
+    let {
         address,
         name:collectionName,
-        symbol,
+        symbol:collectionSymbol,
         tokenId,
         tokenUri,
         metadata:{
@@ -17,11 +17,17 @@ const Header = ({ data, isTokenOwner, deployTBA }) => {
         tba:{address:tbaAddress, isDeployed}
     } = data;
 
+    let fallbackImg = "https://res.cloudinary.com/dy3hbcg2h/image/upload/v1652749173/no-image_qrq0kt.png";
+
+    if (!tokenName) {
+        tokenName = `${collectionSymbol} #${tokenId}`
+    }
+
     return (
         <div className={`relative w-full lg:max-w-full lg:flex mb-2 p-4 shadow-md border rounded my-4 border-blue-100 dark:border-slate-900 ${cardThemeColors}`}>
             <div className="flex items-start bg-cover text-center overflow-hidden">
                 <img
-                    src={tokenImage || fallbackNoImage}
+                    src={tokenImage || fallbackImg}
                     alt=""
                     className="h-36 w-auto"
                 />
@@ -29,7 +35,7 @@ const Header = ({ data, isTokenOwner, deployTBA }) => {
             <div className="pl-6 flex flex-col flex-1">
                 <div className="mb-2">
                     <span className="inline-block py-1 leading-none text-yellow-600 uppercase tracking-wide text-xs">
-                        {symbol}
+                        {collectionSymbol}
                     </span>
                     <div className="font-bold text-4xl">
                         {tokenName}
