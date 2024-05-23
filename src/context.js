@@ -47,6 +47,7 @@ const AppProvider = (props) => {
             if (walletDetails.connected) {
 				console.log("Wallet connected");
 				setStatus('connected');
+				//walletDetails.details.address = "TWzsVxiFPAr86tufyS2x3Bnrn2JfdZzMLe"
 				setAccountData(walletDetails.details);
 				clearInterval(interval);
 			}        

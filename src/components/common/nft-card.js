@@ -25,6 +25,13 @@ const NftCard = ({ nft }) => {
         tokenName = `${collectionSymbol} #${tokenId}`
     }
 
+    if (tokenImg) {
+        if (tokenImg.startsWith('ipfs')) {
+            tokenImg = tokenImg.replace("ipfs://", "https://ipfs.io/ipfs/")
+        }
+    }
+    //console.log(tokenImg, tokenName, metadata)
+
     return (
         <div className="w-full sm:w-1/2 md:w-1/3 p-4">
             <Link href={linkTo}>

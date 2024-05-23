@@ -1,7 +1,9 @@
 import { cardThemeColors, getUITestData, toFixedIfNecessary } from "@/src/lib/myutils";
-import { IconCopy, IconExternalLink } from "@tabler/icons-react";
+import { IconCheck, IconCopy, IconExternalLink } from "@tabler/icons-react";
+import { useState } from "react";
 
 const Header = ({ data, isTokenOwner, deployTBA }) => {
+    const [linkCopied, setLinkCopied] = useState(false);
     let {
         address,
         name:collectionName,
@@ -21,6 +23,20 @@ const Header = ({ data, isTokenOwner, deployTBA }) => {
 
     if (!tokenName) {
         tokenName = `${collectionSymbol} #${tokenId}`
+    }
+
+    if (tokenImage) {
+        if (tokenImage.startsWith('ipfs')) {
+            tokenImage = tokenImage.replace("ipfs://", "https://ipfs.io/ipfs/")
+        }
+    }
+
+    const handleCopyToClipboard = () => {
+        navigator.clipboard.writeText(tbaAddress);
+        setLinkCopied(true);
+        setTimeout(() => {
+            setLinkCopied(false);
+        }, 2500);
     }
 
     return (
@@ -54,15 +70,27 @@ const Header = ({ data, isTokenOwner, deployTBA }) => {
                             <span className="inline-block px-2 py-1 leading-none bg-purple-200 text-purple-800 rounded-full font-semibold uppercase tracking-wide text-xs mr-1">
                                 Tokenbound
                             </span>
-                            <span className="block pl-1 pt-3 leading-none font-semibold tracking-wide text-xs mr-1">
+                            <span className="flex items-center gap-1 pl-1 pt-3 leading-none font-semibold tracking-wide text-xs mr-1">
                                 <a 
                                     href={`https://nile.tronscan.org/#/address/${tbaAddress}`}
-                                    className="flex items-center gap-1"
+                                    className="flex items-center gap-1 underline"
                                     target="_blank" 
                                 > 
                                     {tbaAddress}
-                                    <IconCopy className="w-3 h-3" />
                                 </a>
+                                <button
+                                    type="button"
+                                    title="Copy TBA address"
+                                    onClick={() => handleCopyToClipboard()}
+                                >
+                                    {
+                                        linkCopied ? (
+                                            <IconCheck className="w-4 h-4" />
+                                        ): (
+                                            <IconCopy className="w-4 h-4" />
+                                        )
+                                    }
+                                </button>
                             </span>
                             </div>
                         ) : null}

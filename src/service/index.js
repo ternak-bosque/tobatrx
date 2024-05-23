@@ -227,12 +227,14 @@ export async function getNftInfoByOwnerIndex(contractAddr, holderAddr, index) {
     let contract = await tronWeb.contract().at(contractAddr);
     try {
         let tokenId = await contract.tokenOfOwnerByIndex(holderAddr, index).call();
-        let tokenUri = await contract.tokenURI(tokenId).call();
+        let _tokenId = Array.isArray(tokenId) ? tokenId[0] : tokenId; // check for tupples
+        let tokenUri = await contract.tokenURI(_tokenId).call();
         let metadata = {};
 
         if (tokenUri.startsWith('http') || tokenUri.startsWith('ipfs')) {
+            let _tokenUri = tokenUri.startsWith('ipfs') ? tokenUri.replace("ipfs://", "https://ipfs.io/ipfs/") : tokenUri;
             try {
-                metadata = await (await fetch(tokenUri)).json();
+                metadata = await (await fetch(_tokenUri)).json();
             } catch (error) {
                 console.log('error getting metadata')
             }
