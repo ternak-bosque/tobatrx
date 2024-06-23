@@ -2,7 +2,10 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import { parseUnits } from "viem";
 import {
 	getTronWeb,
+	getWalletEvent,
 	getWalletDetails,
+} from './service/wallet';
+import {
 	getAccountTokens,
     getAccountInfo,
 	tbaGetAddress,
@@ -19,7 +22,7 @@ const DataContext = createContext();
 export const useApp = () => useContext(DataContext);
 
 const AppProvider = (props) => {
-	const [accountInfo, setAccountInfo] = useState({});
+	const [walletInfo, setWalletInfo] = useState({});
 	const [accountNfts, setAccountNfts] = useState(null);
 	const [accountTokens, setAccountTokens] = useState(null);
 	const [currentTBA, setCurrentTBA] = useState({});
@@ -45,21 +48,22 @@ const AppProvider = (props) => {
             const walletDetails = await getWalletDetails();
             //wallet checking interval 2sec
             if (walletDetails.connected) {
-				console.log("Wallet connected");
+				console.log("Wallet connected", walletDetails);
 				setStatus('connected');
 				//walletDetails.details.address = "TWzsVxiFPAr86tufyS2x3Bnrn2JfdZzMLe"
-				setAccountData(walletDetails.details);
+				//setAccountData(walletDetails.details);
+				setWalletInfo(walletDetails.details);
 				clearInterval(interval);
 			}        
         }, 2000);
 	}
 
-	async function setAccountData(walletDetails) {
-		setAccountInfo(walletDetails);
+	async function setAccountData() {
+		if(!walletInfo.address) return;
 
-        const accountAssets = await getAccountCollectiblesREST(walletDetails.address);
+        const accountAssets = await getAccountCollectiblesREST(walletInfo.address);
         const assetsData = accountAssets.data.map(o => formatAssetDataFromTronscan(o))
-        const { accountNfts } = await getAccountTokens(assetsData.map(({address}) => address), walletDetails.address);
+        const { accountNfts } = await getAccountTokens(assetsData.map(({address}) => address), walletInfo.address);
 
 		const reqTbaInfo = accountNfts.map(t => tbaGetAddress(t.address, t.tokenId));
 		const tbaInfo = await Promise.all(reqTbaInfo);
@@ -69,80 +73,12 @@ const AppProvider = (props) => {
 			return { ...data, tba }
 		});
 
+		// const _accountNfts = accountNfts.map(el => {
+		// 	return {...el, tba:{address:"", isDeployed:false}}
+		// })
+		
 		setAccountNfts(_accountNfts)
 	}
-
-	async function deployTokenBoundAccount(tokenContract, tokenId) {
-		const _continue = confirm(`Do you want to create a Token-Bound Account for this NFT?`);
-		if (_continue) {
-			const tbaAddress = await tbaCreateAccount(tokenContract, tokenId)
-			if (tbaAddress !== null) {
-				alert("Account created!")
-			}
-			else {
-				alert("An error occurred!!")
-			}
-		}
-	}
-
-	async function sendTokens({
-		contractAddress,
-		tokenAmount,
-		toAddress,
-		decimals
-	}){
-        // How many tokens?
-        let numberOfTokens = parseUnits(tokenAmount, decimals);
-
-		if (contractAddress) {
-			let encodedTransferData = await getEncodedFunctionData(
-				contractAddress,
-				"transfer(address,uint256)",
-				[
-					{type:'address', value:toAddress},
-					{type:'uint256', value:numberOfTokens}
-				]
-			)
-
-			//console.log(contractAddress, 0, encodedTransferData, currentTBA)
-			const req = await tbaExecute(contractAddress, 0, encodedTransferData, currentTBA)
-			showTxFeedback(req)
-			return req.transactionId
-		}
-		else {
-			//console.log(toAddressHex, numberOfTokens, "0x", currentTBA)
-			const req = await tbaExecute(toAddress, numberOfTokens, "0x", currentTBA)
-			showTxFeedback(req)
-			return req.transactionId
-		}
-    }
-
-    async function sendNFT(
-        contractAddress,
-        toAddress,
-        tokenId
-    ){ 
-        let fromAddress = currentTBA;
-    
-        try {			
-			let encodedTransferData = await getEncodedFunctionData(
-				contractAddress,
-				"transferFrom(address,address,uint256)",
-				[
-					{type:'address', value:fromAddress},
-					{type:'address', value:toAddress},
-					{type:'uint256', value:tokenId}
-				]
-			)
-
-            const req = await tbaExecute(contractAddress, 0, encodedTransferData, currentTBA)
-			showTxFeedback(req)
-			return req.transactionId
-        } catch (e) {
-            console.log(e)
-            return null;
-        }
-    }
 
 	function showTxFeedback(req) {
 		// setTimeout(async () => {
@@ -157,18 +93,16 @@ const AppProvider = (props) => {
 
 	const data = {
 		accountTokens,
-		accountInfo,
+		walletInfo,
 		accountNfts,
 		currentTBA,
 		status
 	}
 
 	const fn = {
-		deployTokenBoundAccount,
+		setAccountData,
 		setWalletDetails,
 		setCurrentTBA,
-		sendTokens,
-		sendNFT
 	}
 
 	return (

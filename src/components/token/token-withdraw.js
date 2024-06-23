@@ -11,6 +11,7 @@ import { IconTransfer } from "@tabler/icons-react";
 import { bodyThemeColors, buttonStyle, isNullAddress } from "@/src/lib/myutils";
 import { isValidAddress } from "@/src/service";
 import { useApp } from "@/src/context";
+import { sendTokens } from "@/src/service/tokenbound";
 
 
 const getBlockExplorerUrl = (txid) => {
@@ -19,7 +20,7 @@ const getBlockExplorerUrl = (txid) => {
 
 const TokenWithdraw = ({ symbol, address, balance, decimals }) => {
     const {
-        fn: { sendTokens }
+        data: { currentTBA }
     } = useApp();
 
     const [txid, setTxid] = useState("");
@@ -54,7 +55,8 @@ const TokenWithdraw = ({ symbol, address, balance, decimals }) => {
             contractAddress,
             tokenAmount,
             toAddress,
-            decimals
+            decimals,
+            currentTBA
         });
 
         setIsProcessing(false);

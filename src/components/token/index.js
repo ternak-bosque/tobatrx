@@ -8,40 +8,25 @@ import {
     getAccountTokensREST,
     getAccountTokens, 
     getNftInfoById, 
-    tbaGetAddress 
+    tbaGetAddress, 
+    getNftOwner
 } from "@/src/service";
 
 const Token = ({ id }) => { 
     const { 
-        data: { accountNfts, currentTBA },
-        fn: { setCurrentTBA, deployTokenBoundAccount }
+        data: { walletInfo },
+        fn: { setCurrentTBA }
     } = useApp();
 
     const [tokenAddress, tokenId] = id.split("_");
 
-    const [isTokenOwner, setIsTokenOwner] = useState(false);
+    const [tokenOwner, setTokenOwner] = useState(false);
     const [accountBalance, setAccountBalance] = useState(0);
     const [accountDetail, setAccountDetail] = useState(null);
-	const [collectibles, setCollectibles] = useState([]);
-	const [assets, setAssets] = useState([]);
 
     useEffect(() => {
-        if (accountNfts !== null) {
-            const _accountDetail = accountNfts.find(t => getUniqueTokenId(t) === id)
-            if (_accountDetail) {
-                setAccountDetail(_accountDetail)
-                setCurrentTBA(_accountDetail.tba.address)
-                setIsTokenOwner(true)
-            
-                if (_accountDetail.tba.isDeployed) {
-                    setAccountData(_accountDetail.tba.address);
-                }
-            }
-            else {
-                getExternalNftDetails();
-            }          
-        }        
-    }, [accountNfts])
+        getExternalNftDetails();
+    }, [])
 
     async function getExternalNftDetails() {
         const _accountDetail = await getNftInfoById(tokenAddress, tokenId);
@@ -49,25 +34,27 @@ const Token = ({ id }) => {
         setAccountDetail({..._accountDetail, tba});       
         setCurrentTBA(tba);
 
-        if (tba.isDeployed) {
-            setAccountData(tba.address);
-        }
+        const owner = await getNftOwner(tokenAddress, tokenId);
+        setTokenOwner(owner);
+
+        // if (tba.isDeployed) {
+        //     setAccountData(tba.address);
+        // }
     }
 
-    async function setAccountData(tbaAddress) {
-        const accountAssets = await getAccountTokensREST(tbaAddress);
-        const assetsData = accountAssets.data.map(o => formatAssetDataFromTronscan(o)).filter(t => t.address !== "_")
-        const _accountTokens = assetsData.filter(t => t.type === "FUNGIBLE_COMMON")
-        console.log(assetsData)
+    // async function setAccountData(tbaAddress) {
+    //     const accountAssets = await getAccountTokensREST(tbaAddress);
+    //     const assetsData = accountAssets.data.map(o => formatAssetDataFromTronscan(o)).filter(t => t.address !== "_")
+    //     const _accountTokens = assetsData.filter(t => t.type === "FUNGIBLE_COMMON")
 
-        const { accountTokens, accountNfts } = await getAccountTokens(assetsData.map(({address}) => address), tbaAddress);
-        setAssets(_accountTokens);
-		setCollectibles(accountNfts)
-		console.log(_accountTokens, accountNfts)
+    //     const { accountNfts } = await getAccountTokens(assetsData.map(({address}) => address), tbaAddress);
+    //     setAssets(_accountTokens);
+	// 	setCollectibles(accountNfts)
+	// 	console.log(_accountTokens, accountNfts)
 
-        const balance = accountAssets.data[0].quantity;
-        setAccountBalance(balance)
-	}
+    //     const balance = accountAssets.data[0].quantity;
+    //     setAccountBalance(balance)
+	// }
 
     if (!accountDetail) {
         return (
@@ -82,16 +69,14 @@ const Token = ({ id }) => {
             <div className="p-3 rounded-md w-full">
                 <Header 
                     data={accountDetail} 
-                    isTokenOwner={isTokenOwner}
-                    deployTBA={deployTokenBoundAccount}
+                    isTokenOwner={walletInfo.address === tokenOwner}
                 />
 
                 {
                     accountDetail.tba.isDeployed ? (
                         <AccountAssets 
-                            tokens={assets} 
-                            nfts={collectibles} 
-                            balance={accountBalance}
+                            address={accountDetail.tba.address}
+                            isDeployed={accountDetail.tba.isDeployed}
                         />
                     ): (
                         <div className="py-8 text-center text-gray-400 text-xl">

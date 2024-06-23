@@ -8,7 +8,7 @@ export default function Header() {
         <div className="flex flex-row items-center justify-between p-4">
           <a
             href="/"
-            className="flex gap-2 items-center text-4xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-red-300 to-amber-300 md:text-gray-900"
+            className="flex gap-2 items-center text-4xl font-semibold tracking-tight md:text-gray-900"
           >
             <img src="/favico.png" alt="" className="w-8 h-8 rounded-md" />
             <span className="font-titles font-bold">TOBA</span>
@@ -25,7 +25,7 @@ export default function Header() {
               height="24"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#fff"
+              stroke="#b353ea"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -47,7 +47,7 @@ export default function Header() {
               <li>
                 <a
                   href="#features"
-                  className="text-lg text-white md:text-black hover:text-gray-300 md:hover:text-gray-700"
+                  className="text-lg text-gray-900 hover:text-purple-700 md:hover:text-gray-700"
                 >
                   Features
                 </a>
@@ -55,7 +55,7 @@ export default function Header() {
               <li>
                 <a
                   href="#demo"
-                  className="text-lg text-white md:text-black hover:text-gray-300 md:hover:text-gray-700"
+                  className="text-lg text-gray-900 hover:text-purple-700 md:hover:text-gray-700"
                 >
                   Demo
                 </a>
@@ -64,7 +64,7 @@ export default function Header() {
                 <a
                   target="_blank"
                   href="https://github.com/tobaproject/tobatrx"
-                  className="text-lg text-white md:text-black hover:text-gray-300 md:hover:text-gray-700"
+                  className="text-lg text-gray-900 hover:text-purple-700 md:hover:text-gray-700"
                 >
                   Github
                 </a>

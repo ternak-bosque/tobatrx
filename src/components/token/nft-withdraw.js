@@ -10,6 +10,7 @@ import { IconTransfer } from "@tabler/icons-react";
 import { bodyThemeColors, buttonStyle, isNullAddress } from "@/src/lib/myutils";
 import { isValidAddress } from "@/src/service";
 import { useApp } from "@/src/context";
+import { sendNFT } from "@/src/service/tokenbound";
 
 const getBlockExplorerUrl = (txid) => {
     return `https://nile.tronscan.io/#/transaction/${txid}`;
@@ -17,7 +18,7 @@ const getBlockExplorerUrl = (txid) => {
 
 const NftWithdraw = ({ nft }) => {
     const {
-        fn: { sendNFT }
+        data: { currentTBA }
     } = useApp();
 
     const [txid, setTxid] = useState("");
@@ -54,7 +55,8 @@ const NftWithdraw = ({ nft }) => {
         let response = await sendNFT(
             contractAddress,
             toAddress,
-            tokenId
+            tokenId,
+            currentTBA
         );
 
         setIsProcessing(false);

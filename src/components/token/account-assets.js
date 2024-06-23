@@ -1,8 +1,16 @@
 import { toFixedIfNecessary } from "@/src/lib/myutils";
-import TokenItem from "../common/token-item";
-import NftItem from "../common/nft-item";
+import TokenItem from "./token-item";
+import NftItem from "./nft-item";
+import { useGetTbaAssets } from "@/src/service/hooks";
 
-const AccountAssets = ({ balance = 100000, tokens = [], nfts = [] }) => {
+const AccountAssets = ({ address, isDepoyed }) => {
+    const { data, isLoading, isError, isFetching } = useGetTbaAssets(address, isDepoyed);
+    const { 
+        balance = 0, 
+        assets = [], 
+        collectibles = [] 
+    } = data;
+
     return (
         <>
             <div className="py-4 rounded-md w-full">
@@ -19,7 +27,7 @@ const AccountAssets = ({ balance = 100000, tokens = [], nfts = [] }) => {
                     address={null}
                 />
 			{
-				tokens.map(item => {
+				!isFetching && assets.map(item => {
 					const { address, symbol, type, name, balance, decimals } = item;
 					const _balance = toFixedIfNecessary(balance, 2);
 					
@@ -45,13 +53,20 @@ const AccountAssets = ({ balance = 100000, tokens = [], nfts = [] }) => {
                 </h3>
                 <div className="w-full">
                     {
-                        nfts.length === 0 && (
+                        isFetching && (
+                            <div className="w-full flex justify-center py-8">
+                                <div className="text-lg text-gray-400">Loading Assets...</div>
+                            </div>
+                        ) 
+                    }
+                    {
+                        collectibles.length === 0 && (
                             <div className="w-full flex justify-center py-8">
                                 <div className="text-lg text-gray-400">No collectibles found</div>
                             </div>
                         ) 
                     }
-                    {nfts.map((data) => (
+                    {!isFetching && collectibles.map((data) => (
                         <NftItem key={data.tokenId} nft={data} />
                     ))}
                 </div>

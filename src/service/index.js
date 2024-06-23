@@ -2,124 +2,21 @@ import axios from "axios";
 import TronWeb from "tronweb";
 import { REGISTRY_ABI, REGISTRY_CONTRACT_ADDRESS } from "../constants/registry";
 import { IMPLEMENTATION_ABI, IMPLEMENTATION_CONTRACT_ADDRESS } from "../constants/account";
-import { TRC721_ABI } from "../constants/trc721";
+import { getHostNetwork } from "./wallet";
+import { TOKENBOUND } from "../constants/tokenbound";
 
-const trongridBaseAPI = "https://nile.trongrid.io";
-const tronscanBaseAPI = "https://nileapi.tronscan.org";
 
 function useTronWeb() {
+    const {trongridBaseAPI} = getHostNetwork(window.tronLink.tronWeb.fullNode.host)
     return new TronWeb({
         fullHost: trongridBaseAPI,
         privateKey: process.env.NEXT_PUBLIC_TRONGRID_PK        
     });
 }
 
-const tronWeb = useTronWeb() //window.tronWeb
-
-export function getTronWeb(){
-  // Obtain the tronweb object injected by tronLink 
-  var obj = setInterval(async ()=>{
-    if (window.tronWeb && window.tronWeb.defaultAddress.base58) {
-        clearInterval(obj)
-        console.log("tronWeb successfully detected!")
-    }
-  }, 100)
-}
-
-export const getBalance = async () => {
-    //if wallet installed and logged , getting TRX token balance
-    if (window.tronLink.tronWeb && window.tronLink.tronWeb.ready) {
-        let walletBalances = await window.tronLink.tronWeb.trx.getAccount(
-            window.tronLink.tronWeb.defaultAddress.base58
-        );
-        return walletBalances;
-    } else {
-        return 0;
-    }
-}
-
-export const getWalletDetails = async () => {
-    if (window.tronLink.tronWeb) {
-        //checking if wallet injected
-        if (window.tronLink.tronWeb.ready) {
-            let tempBalance = await getBalance();
-            let tempFrozenBalance = 0;
-
-            if (!tempBalance.balance) {
-                tempBalance.balance = 0;
-            }
-
-            //checking if any frozen balance exists
-            if (
-                !tempBalance.frozen &&
-                !tempBalance.account_resource.frozen_balance_for_energy
-            ) {
-                tempFrozenBalance = 0;
-            } else {
-                if (
-                    tempBalance.frozen &&
-                    tempBalance.account_resource.frozen_balance_for_energy
-                ) {
-                    tempFrozenBalance =
-                        tempBalance.frozen[0].frozen_balance +
-                        tempBalance.account_resource.frozen_balance_for_energy
-                            .frozen_balance;
-                }
-                if (
-                    tempBalance.frozen &&
-                    !tempBalance.account_resource.frozen_balance_for_energy
-                ) {
-                    tempFrozenBalance = tempBalance.frozen[0].frozen_balance;
-                }
-                if (
-                    !tempBalance.frozen &&
-                    tempBalance.account_resource.frozen_balance_for_energy
-                ) {
-                    tempFrozenBalance =
-                        tempBalance.account_resource.frozen_balance_for_energy
-                            .frozen_balance;
-                }
-            }
-
-            //we have wallet and we are logged in
-            const details = {
-                name: window.tronLink.tronWeb.defaultAddress.name,
-                address: window.tronLink.tronWeb.defaultAddress.base58,
-                balance: tempBalance.balance / 1000000,
-                frozenBalance: tempFrozenBalance / 1000000,
-                network: window.tronLink.tronWeb.fullNode.host,
-                link: 'true',
-            };
-            return {
-                connected: true,
-                details
-            }
-        } else {
-            //we have wallet but not logged in
-            const details = {
-                name: 'none',
-                address: 'none',
-                balance: 0,
-                frozenBalance: 0,
-                network: 'none',
-                link: 'false',
-            };
-            return {
-                connected: false,
-                details
-            }
-        }
-    } else {
-        //wallet is not detected at all
-        return {
-            connected: false,
-            details: null
-        }
-    }
-}
-
 export async function getAccountInfo(address) {
     let response = null;
+    const {trongridBaseAPI} = getHostNetwork(window.tronLink.tronWeb.fullNode.host)
 
     try {
         const res = await axios.get(`${trongridBaseAPI}/v1/accounts/${address}`);
@@ -133,7 +30,6 @@ export async function getAccountInfo(address) {
 
     return response;
 }
-
 
 export function formatAssetDataFromTronscan(data) {
     const type = data.tokenType === "trc721" ? 
@@ -154,6 +50,7 @@ export function formatAssetDataFromTronscan(data) {
 
 export async function getAccountTokensREST(address) {
     let response = null;
+    const {tronscanBaseAPI} = getHostNetwork(window.tronLink.tronWeb.fullNode.host);
 
     try {
         const res = await axios.get(`${tronscanBaseAPI}/api/account/tokens?address=${address}`);
@@ -170,6 +67,7 @@ export async function getAccountTokensREST(address) {
 
 export async function getAccountCollectiblesREST(address) {
     let response = null;
+    const {tronscanBaseAPI} = getHostNetwork(window.tronLink.tronWeb.fullNode.host);
 
     try {
         const res = await axios.get(`${tronscanBaseAPI}/api/account/tokens?address=${address}&show=3`);
@@ -185,6 +83,7 @@ export async function getAccountCollectiblesREST(address) {
 }
 
 export async function getTokenInfo(contractAddr, holderAddr) {
+    let tronWeb = useTronWeb();
     let contract = await tronWeb.contract().at(contractAddr);
     let decimals = 0;
     //let isFungible = false;
@@ -224,6 +123,7 @@ export async function getTokenInfo(contractAddr, holderAddr) {
 }
 
 export async function getNftInfoByOwnerIndex(contractAddr, holderAddr, index) {
+    let tronWeb = useTronWeb();
     let contract = await tronWeb.contract().at(contractAddr);
     try {
         let tokenId = await contract.tokenOfOwnerByIndex(holderAddr, index).call();
@@ -265,6 +165,7 @@ export async function getNftInfoByOwnerIndex(contractAddr, holderAddr, index) {
 }
 
 export async function getNftInfoById(contractAddr, tokenId) {
+    let tronWeb = useTronWeb();
     let contract = await tronWeb.contract().at(contractAddr);
     try {
         let name = await contract.name().call();
@@ -333,21 +234,34 @@ export async function getAccountTokens(tokens, holderAddr) {
     }
 }
 
+export async function getNftOwner(contractAddr, tokenId) {
+    let tronWeb = useTronWeb();
+    const contract = await tronWeb.contract().at(contractAddr);
+    try {
+        const owner = await contract.ownerOf(tokenId).call();
+        return tronWeb.address.fromHex(owner);
+    } catch (error) {
+        console.log("smartcontract error", error);
+        return null
+    }
+}
+
 export async function getBalanceAddr(address) {
+    let tronWeb = useTronWeb();
     const result = await tronWeb.trx.getBalance(address);
     return result;
 }
 
 // tokenbound methods
-const MAINNET_ID = 3448148188;
-const SALT = "0x1000000000000000000000000000000000000000000000000000000000000000"
 
 export function isValidAddress(addr) {
+    let tronWeb = useTronWeb();
     return tronWeb.isAddress(addr)
 }
 
 export function addressToHex(addr) {
-    return tronWeb.address.toHex(addr)
+    let tronWeb = useTronWeb();
+    return tronWeb.address.toHex(addr);
 }
 
 export async function getEncodedFunctionData(
@@ -355,6 +269,7 @@ export async function getEncodedFunctionData(
     func,
     parameters
 ) {
+    let tronWeb = useTronWeb();
     try {
         const {transaction} = await tronWeb.transactionBuilder.triggerSmartContract(
             contractAddress,
@@ -372,15 +287,36 @@ export async function getEncodedFunctionData(
     }
 }
 
+export async function tbaGetOwner(tbaAddress) {
+    let tronWeb = useTronWeb();
+    const contract = await tronWeb.contract(IMPLEMENTATION_ABI, tbaAddress);
+    try {
+        const owner = await contract.owner().call();
+        return tronWeb.address.fromHex(owner);
+    } catch (error) {
+        console.log("smartcontract error", error);
+        return null
+    }
+}
+
 export async function tbaGetAddress(tokenContract, tokenId) {
-    const contract = await tronWeb.contract(REGISTRY_ABI, REGISTRY_CONTRACT_ADDRESS);
+    const { id:networkId, chainId } = getHostNetwork(window.tronLink.tronWeb.fullNode.host);
+    const {
+        salt,
+        registryAbi,
+        registryAddress,
+        accountImplementationAddress
+    } = TOKENBOUND[networkId];
+
+    let tronWeb = useTronWeb();
+    const contract = await tronWeb.contract(registryAbi, registryAddress);
     const tid = `${tokenContract}_${tokenId}`;
 
     try {
         const address = await contract.account(
-            IMPLEMENTATION_CONTRACT_ADDRESS,
-            SALT,
-            MAINNET_ID,
+            accountImplementationAddress,
+            salt,
+            chainId,
             tokenContract,
             tokenId
         ).call();
@@ -407,14 +343,22 @@ export async function tbaGetAddress(tokenContract, tokenId) {
 }
 
 export async function tbaCreateAccount(tokenContract, tokenId) {
+    const { id:networkId, chainId } = getHostNetwork(window.tronLink.tronWeb.fullNode.host);
+    const {
+        salt,
+        registryAbi,
+        registryAddress,
+        accountImplementationAddress
+    } = TOKENBOUND[networkId];
+
     const tweb = window.tronLink.tronWeb;
-    const contract = await tweb.contract(REGISTRY_ABI, REGISTRY_CONTRACT_ADDRESS);
+    const contract = await tweb.contract(registryAbi, registryAddress);
 
     try {
         const address = await contract.createAccount(
-            IMPLEMENTATION_CONTRACT_ADDRESS,
-            SALT,
-            MAINNET_ID,
+            accountImplementationAddress,
+            salt,
+            chainId,
             tokenContract,
             tokenId
         )
@@ -431,8 +375,13 @@ export async function tbaCreateAccount(tokenContract, tokenId) {
 }
 
 export async function tbaExecute(to, value, data, tbaAddress) {
+    const { id:networkId } = getHostNetwork(window.tronLink.tronWeb.fullNode.host);
+    const {
+        accountImplementationAbi,
+    } = TOKENBOUND[networkId];
+
     const tweb = window.tronLink.tronWeb;
-    const contract = await tweb.contract(IMPLEMENTATION_ABI, tbaAddress);
+    const contract = await tweb.contract(accountImplementationAbi, tbaAddress);
 
     try {
         const operation = 0; // CALL
@@ -455,7 +404,11 @@ export async function tbaExecute(to, value, data, tbaAddress) {
 }
 
 export async function mintTestNFT(userAddress, index) {
-    const contractAddr = "TNJYzc441rr4u315ABYzNN5MZ8ExjAfqLV"
+    const { id } = getHostNetwork(window.tronLink.tronWeb.fullNode.host);
+    if (id === "mainnet") return;
+
+    let tronWeb = useTronWeb();
+    const contractAddr = id === "nile" ? "TNJYzc441rr4u315ABYzNN5MZ8ExjAfqLV" : "TWSvxBxgijiJaKvZh58C4sw3zMeH8qDqUw"
     const contract = await tronWeb.contract().at(contractAddr);
     
     const totalSupply = await contract.totalSupply().call();
