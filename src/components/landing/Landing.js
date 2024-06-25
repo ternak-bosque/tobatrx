@@ -48,7 +48,7 @@ export default function Landing() {
                     <a
                         target="_blank"
                         rel="noreferrer"
-                        href="#"
+                        href="https://www.youtube.com/watch?v=SLiaDaypQ5M"
                     >
                         <img
                             className="transition duration-700 shadow-xl rounded-xl ring-1 ring-black ring-opacity-5 hover:transform hover:scale-105"

@@ -90,46 +90,6 @@ export async function getAccountCollectiblesREST(address) {
     return response;
 }
 
-export async function getTokenInfo(contractAddr, holderAddr) {
-    let tronWeb = useTronWeb();
-    let contract = await tronWeb.contract().at(contractAddr);
-    let decimals = 0;
-    //let isFungible = false;
-    let type = "NON_FUNGIBLE_UNIQUE"
-    try {
-        decimals = await contract.decimals().call();
-        type = "FUNGIBLE_COMMON"
-    } catch (error) {
-        //isFungible = false;
-    }
-
-    try {
-        let name = await contract.name().call();
-        let symbol = await contract.symbol().call();
-        let _balance = await contract.balanceOf(holderAddr).call();
-        
-        let balance = 0
-        try {
-            balance = _balance.toNumber()
-        } catch (error) {
-            let b = BigInt(_balance)
-            balance = tronWeb.BigNumber(b).shiftedBy(-1*decimals).toNumber()
-        }
-
-        return {
-            address: contractAddr,
-            name,
-            symbol,
-            decimals,
-            balance,
-            type
-        }
-    } catch (error) {
-        console.log(symbol, "trigger smart contract error", contractAddr,error);
-        return {};
-    }
-}
-
 export async function getNftInfoByOwnerIndex(contractAddr, holderAddr, index) {
     let tronWeb = useTronWeb();
     let contract = await tronWeb.contract().at(contractAddr);
@@ -216,11 +176,8 @@ export async function getNftInfoById(contractAddr, tokenId) {
 }
 
 export async function getAccountTokens(tokens, holderAddr) {
-    const reqTokenInfos = tokens.map(addr => getTokenInfo(addr, holderAddr));
-    const tokenInfos = await Promise.all(reqTokenInfos);
-
     // format nfts array to iterate easely over it
-    const filterNfts = tokenInfos
+    const filterNfts = tokens
         .filter(t => t.type === "NON_FUNGIBLE_UNIQUE")
         .map(({address, balance}) => {
             const arr = Array(balance).fill(0);
@@ -232,12 +189,12 @@ export async function getAccountTokens(tokens, holderAddr) {
     const nftInfos = await Promise.all(reqNftInfos);
 
     const accountNfts = nftInfos.map(t => {
-        const {name, symbol, type} = tokenInfos.find(i => t.address === i.address);
+        const {name, symbol, type} = tokens.find(i => t.address === i.address);
         return { name, symbol, type, ...t }
     });
     
     return {
-        accountTokens: tokenInfos.filter(t => t.type === "FUNGIBLE_COMMON"),
+        accountTokens: tokens.filter(t => t.type === "FUNGIBLE_COMMON"),
         accountNfts
     }
 }
@@ -500,6 +457,8 @@ export async function mintProfileNFT(userAddress) {
         // let tronWeb = useTronWeb();
         // const newMinter = await tronWeb.contract().at(addressTKBA).addMinter(userAddress).send({ feeLimit: 100_000_000 })
         // console.log(newMinter)
+
+        // or send trx to PAFF and mint
 
         const result = await contract
             .mintWithTokenURI(userAddress, tokenId, tokenUri)

@@ -23,14 +23,9 @@ const Token = ({ id }) => {
 
     const [tokenOwner, setTokenOwner] = useState(false);
     const [accountDetail, setAccountDetail] = useState(null);
-    const [networkExplorer, setNetworkExplorer] = useState("");
 
     useEffect(() => {
         getExternalNftDetails();
-
-        // const {explorer} = getHostNetwork(window.tronLink.tronWeb.fullNode.host);
-        // console.log(explorer)
-        // setNetworkExplorer(explorer);
     }, [])
 
     async function getExternalNftDetails() {
@@ -51,12 +46,14 @@ const Token = ({ id }) => {
         ) 
     }
 
+    const networkExplorer = walletInfo.network ? "walletInfo.network.explorer" : "";
+
     return (
         <div className="lg:max-w-3xl mx-auto">
             <div className="p-3 rounded-md w-full">
                 <Header 
                     data={accountDetail}
-                    networkExplorer={walletInfo.network.explorer}
+                    networkExplorer={networkExplorer}
                     isTokenOwner={walletInfo.address === tokenOwner}
                 />
 

@@ -41,7 +41,7 @@ export function useGetTbaAssets(address) {
 async function getWalletNfts(walletAddress) {
     const accountAssets = await getAccountCollectiblesREST(walletAddress);
     const assetsData = accountAssets.data.map(o => formatAssetDataFromTronscan(o))
-    const { accountNfts } = await getAccountTokens(assetsData.map(({address}) => address), walletAddress);
+    const { accountNfts } = await getAccountTokens(assetsData, walletAddress);
 
     const reqTbaInfo = accountNfts.map(t => tbaGetAddress(t.address, t.tokenId));
     const tbaInfo = await Promise.all(reqTbaInfo);
@@ -58,14 +58,13 @@ async function getWalletNfts(walletAddress) {
 async function getTbaAssets(tbaAddress) {
     const accountAssets = await getAccountTokensREST(tbaAddress);
     const assetsData = accountAssets.data.map(o => formatAssetDataFromTronscan(o)).filter(t => t.address !== "_")
-    const _accountTokens = assetsData.filter(t => t.type === "FUNGIBLE_COMMON")
 
-    const { accountNfts } = await getAccountTokens(assetsData.map(({address}) => address), tbaAddress);
+    const { accountNfts, accountTokens } = await getAccountTokens(assetsData, tbaAddress);
     const balance = accountAssets.data[0].quantity;
 
     return {
         balance,
-        assets: _accountTokens,
+        assets: accountTokens,
         collectibles: accountNfts
     }
 }

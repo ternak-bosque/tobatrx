@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.0;
 
-// https://github.com/erc6551/reference/blob/main/src/ERC6551Registry.sol
-
 interface IERC6551Registry {
     /**
      * @dev The registry MUST emit the ERC6551AccountCreated event upon successful account creation.
@@ -52,7 +50,6 @@ interface IERC6551Registry {
     ) external view returns (address account);
 }
 
-// contract ERC6551Registry is IERC6551Registry {
 contract TokenboundRegistry is IERC6551Registry {
     function createAccount(
         address implementation,
@@ -87,7 +84,7 @@ contract TokenboundRegistry is IERC6551Registry {
             mstore(0x49, 0x3d60ad80600a3d3981f3363d3d373d3d3d363d73) // ERC-1167 constructor + header
 
             // Copy create2 computation data to memory
-            mstore8(0x00, 0x41) // for EVM is 0xFF, in the TVM we use 0x41
+            mstore8(0x00, 0x41) // for EVM is 0xFF, in the TVM we use 0x41 for create2
             mstore(0x35, keccak256(0x55, 0xb7)) // keccak256(bytecode)
             mstore(0x01, shl(96, address())) // registry address
             mstore(0x15, salt) // salt
