@@ -1,10 +1,10 @@
-import { getUniqueTokenId } from "@/src/lib/myutils";
+import { buttonStyle, getUniqueTokenId } from "@/src/lib/myutils";
 import { useGetWalletNfts } from "@/src/service/hooks";
 import { useEffect } from "react";
 import NftCard from "./nft-card";
 
 
-const Collectibles = ({walletInfo}) => {
+const Collectibles = ({walletInfo, doMint}) => {
     const { data:collectibles, isLoading, isError, refetch } = useGetWalletNfts(walletInfo.address)
 
     // refetch when tronlink's node or account change
@@ -24,9 +24,17 @@ const Collectibles = ({walletInfo}) => {
                 ) 
             }
             {
-                collectibles.length === 0 && (
+                !isLoading && collectibles.length === 0 && (
                     <div className="w-full flex flex-col items-center gap-3 justify-center py-16">
                         <span className="text-lg text-gray-400">No NFTs... Mint a Test NFT</span>
+                        <div className="mt-3">
+                            <button
+                                className={buttonStyle("blue")}
+                                onClick={() => doMint()}
+                            >
+                                Mint test NFT
+                            </button>
+                        </div>
                     </div>
                 )
             }

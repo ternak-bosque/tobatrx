@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useApp } from "@/src/context";
 import { buttonStyle } from "@/src/lib/myutils";
-import { mintTestNFT } from "@/src/service";
+import { mintProfileNFT, mintTestNFT } from "@/src/service";
 import Collectibles from "./collectibles";
 
 const Wallet = () => {
@@ -21,10 +21,17 @@ const Wallet = () => {
     }
 
     const doMint = async () => {
-        const reqMint = [0,0,0].map((v, i) => mintTestNFT(walletInfo.address, i))
-        const mintResults = await Promise.all(reqMint)
-        console.log(mintResults);
-        alert("NFTs Minted")
+        if (walletInfo.network.id !== "mainnet") {
+            const reqMint = [0,0].map((v, i) => mintTestNFT(walletInfo.address, i))
+            const mintResults = await Promise.all(reqMint)
+            console.log(mintResults);
+        }
+        else {
+            const res = await mintProfileNFT(walletInfo.address)
+            console.log(res)
+        }
+         
+        alert("NFT Minted")
     }
 
     return status !== "connected" ? (
@@ -38,20 +45,25 @@ const Wallet = () => {
     ) : (
         <div className="lg:max-w-3xl mx-auto">
             <div className="py-4 rounded-md w-full">
-                <div className="flex gap-3">
+                <div className="flex justify-between items-center gap-3">
                     <h2 className="text-2xl font-bold">Your Collectibles</h2>
-                </div>
-                <div className="w-full flex justify-end">
-                    {/* <button
-                        className={buttonStyle("blue")}
-                        onClick={() => doMint()}
-                    >
-                        Mint Test NFT
-                    </button> */}
+                    <div className="">
+                        {walletInfo.network.id === "mainnet" && (
+                            <button
+                                className={buttonStyle("blue")}
+                                onClick={() => doMint()}
+                            >
+                                Mint Game Profile NFT
+                            </button>
+                        )}
+                    </div>
                 </div>
                 {
                     walletInfo.address && (
-                        <Collectibles walletInfo={walletInfo} />
+                        <Collectibles 
+                            walletInfo={walletInfo}
+                            doMint={doMint}
+                        />
                     )
                 }
             </div>

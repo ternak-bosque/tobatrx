@@ -4,16 +4,16 @@ import { REGISTRY_ABI } from "./registryAbi";
 export const TOKENBOUND = {
     "mainnet": {
         registryAbi: REGISTRY_ABI,
-        registryAddress: "",
+        registryAddress: "TDL8TKzyQiXgciKGgEhncWaGWggfALU4U5",
         accountImplementationAbi: IMPLEMENTATION_ABI,
-        accountImplementationAddress: "",
+        accountImplementationAddress: "TVTVbudvqsMfjJeQtajt9zBSurw1NBMPKD",
         salt: "0x0000000000000000000000000000000000000000000000000000000000000000"
     },
     "shasta": {
         registryAbi: REGISTRY_ABI,
-        registryAddress: "THQZDiuUFSwZoMc3CB2USM22tfmDcEruk1",
+        registryAddress: "TTUzKaqq6NDtd31DR37VS9MmQADXDgsUvg",
         accountImplementationAbi: IMPLEMENTATION_ABI,
-        accountImplementationAddress: "TE7PpzWXYGAcKqv1TjMD5kVEoJVk3xe6Dy",
+        accountImplementationAddress: "TXzmEzD2UqYAUaPWYRTZMGVpF2pvGUu2CK",
         salt: "0x0000000000000000000000000000000000000000000000000000000000000000"
     },
     "nile": {

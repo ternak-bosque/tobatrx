@@ -53,7 +53,7 @@ interface IERC6551Registry {
 }
 
 // contract ERC6551Registry is IERC6551Registry {
-contract DemoRegistry is IERC6551Registry {
+contract TokenboundRegistry is IERC6551Registry {
     function createAccount(
         address implementation,
         bytes32 salt,

@@ -3,7 +3,7 @@ import { deployTokenBoundAccount } from "@/src/service/tokenbound";
 import { IconCheck, IconCopy, IconExternalLink } from "@tabler/icons-react";
 import { useState } from "react";
 
-const Header = ({ data, isTokenOwner }) => {
+const Header = ({ data, networkExplorer, isTokenOwner }) => {
     const [linkCopied, setLinkCopied] = useState(false);
     let {
         address,
@@ -61,7 +61,7 @@ const Header = ({ data, isTokenOwner }) => {
                         {description}
                     </div> */}
                     <div className="my-1 text-gray-400">
-                        <a href={`https://nile.tronscan.org/#/contract/${address}`} target="_blank">
+                        <a href={`${networkExplorer}/#/contract/${address}`} target="_blank">
                             <span>{collectionName} #{tokenId}</span>
                         </a>
                     </div>
@@ -82,7 +82,7 @@ const Header = ({ data, isTokenOwner }) => {
                                 </div>                   
                                 <span className="flex items-center gap-1 pl-1 pt-3 leading-none font-semibold tracking-wide text-xs mr-1">
                                     <a 
-                                        href={`https://nile.tronscan.org/#/address/${tbaAddress}`}
+                                        href={`${networkExplorer}/#/address/${tbaAddress}`}
                                         className="flex items-center gap-1 underline"
                                         target="_blank" 
                                     > 

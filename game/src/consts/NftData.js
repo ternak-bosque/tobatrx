@@ -19,6 +19,7 @@ export const getProfileJSON = (tokenId) => {
         "description":"A running dino to play Untittled Adventures",
         "attributes":[
             {"trait_type":"nickname","value":`${nickname}`},
+            {"trait_type":"type","value":"profile"},
         ]
     }
 }

@@ -1234,7 +1234,7 @@ contract TRC721Enumerable is Context, TRC165, TRC721, ITRC721Enumerable {
 }
 
 contract TRC721Token is TRC721, TRC721Enumerable, TRC721MetadataMintable {
-    constructor() public TRC721Metadata("My Animotion Obsession", "AO2") {
+    constructor() public TRC721Metadata("Tokenbound Adventures", "TKBA") {
        
     }
 }

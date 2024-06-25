@@ -1,3 +1,5 @@
+import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
+
 export const fallbackNoImage = "/noimage.svg";
 export const cardThemeColors = "bg-white dark:bg-zinc-900";
 export const bodyThemeColors =
@@ -86,6 +88,26 @@ export const getFallbackImage = (title, i) => {
     return `https://api.nilskoepke.com/profile-image?name=${title.replaceAll(" ", "+")}&backgroundColor=${color}`
 }
 
-export const getUITestData = () => {
-    return JSON.parse(`{"tokens":[{"address":"TNuoKL1ni8aoshfFL1ASca1Gou9RXwAzfn","name":"BitTorrent","symbol":"BTT","decimals":18,"balance":10000000,"type":"FUNGIBLE_COMMON"}],"nfts":[{"name":"My Animotion Obsession","symbol":"AO2","type":"NON_FUNGIBLE_UNIQUE","address":"TNJYzc441rr4u315ABYzNN5MZ8ExjAfqLV","tokenId":"1","tokenUri":"https://bafybeid7b3d3lolr3or554hcbcciqatrafcvg6o7acpn6jwlnvnx2qmqpq.ipfs.dweb.link/1.json","tba":{"address":"TYh59YSeWVewxXpfsEHyxev6j3jKn3Cv1d","isDeployed":true,"tid":"TNJYzc441rr4u315ABYzNN5MZ8ExjAfqLV_1"},"metadata":{"tokenId":1,"name":"Dudes #1","image":"https://bafybeibiq42sc3yx6jqok6p5cqi46kdwovcycvy4vh6tlruxphsgonnyja.ipfs.dweb.link/1.png","description":"Join our exclusive community of NFT fanatics","attributes":[{"trait_type":"Hair","value":"Bed Head"},{"trait_type":"Face","value":"Rainbow Puke"},{"trait_type":"Body","value":"Navy Sweater"},{"trait_type":"Background","value":"Pink"},{"trait_type":"Traits Count","value":"5"},{"trait_type":"Piercing","value":"None"},{"trait_type":"Head","value":"Med"},{"trait_type":"Rarity Rank","value":38,"display_type":"number"},{"trait_type":"TRON Points","value":9963,"display_type":"number"}]}},{"name":"My Animotion Obsession","symbol":"AO2","type":"NON_FUNGIBLE_UNIQUE","address":"TNJYzc441rr4u315ABYzNN5MZ8ExjAfqLV","tokenId":"2","tokenUri":"https://bafybeid7b3d3lolr3or554hcbcciqatrafcvg6o7acpn6jwlnvnx2qmqpq.ipfs.dweb.link/2.json","tba":{"address":"TSXZuJtWP2VERQxe7VjsnxJYWEF2wULGCn","isDeployed":true,"tid":"TNJYzc441rr4u315ABYzNN5MZ8ExjAfqLV_2"},"metadata":{"tokenId":2,"name":"Dudes #2","image":"https://bafybeibiq42sc3yx6jqok6p5cqi46kdwovcycvy4vh6tlruxphsgonnyja.ipfs.dweb.link/2.png","description":"Join our exclusive community of NFT fanatics","attributes":[{"trait_type":"Face","value":"Whale"},{"trait_type":"Traits Count","value":"3"},{"trait_type":"Body","value":"None"},{"trait_type":"Background","value":"Gradient 3"},{"trait_type":"Hair","value":"None"},{"trait_type":"Piercing","value":"None"},{"trait_type":"Head","value":"Green"},{"trait_type":"Rarity Rank","value":49,"display_type":"number"},{"trait_type":"TRON Points","value":9952,"display_type":"number"}]}},{"name":"My Animotion Obsession","symbol":"AO2","type":"NON_FUNGIBLE_UNIQUE","address":"TNJYzc441rr4u315ABYzNN5MZ8ExjAfqLV","tokenId":"3","tokenUri":"https://bafybeid7b3d3lolr3or554hcbcciqatrafcvg6o7acpn6jwlnvnx2qmqpq.ipfs.dweb.link/3.json","tba":{"address":"TAmYyPxwmumiqJT4w5hpfhXVyWcgZuGUCS","isDeployed":false,"tid":"TNJYzc441rr4u315ABYzNN5MZ8ExjAfqLV_3"},"metadata":{"tokenId":3,"name":"Dudes #3","image":"https://bafybeibiq42sc3yx6jqok6p5cqi46kdwovcycvy4vh6tlruxphsgonnyja.ipfs.dweb.link/3.png","description":"Join our exclusive community of NFT fanatics","attributes":[{"trait_type":"Hair","value":"Holographic Mohawk"},{"trait_type":"Face","value":"Skeleton"},{"trait_type":"Body","value":"Green Hoodie"},{"trait_type":"Background","value":"Gradient 2"},{"trait_type":"Traits Count","value":"5"},{"trait_type":"Piercing","value":"None"},{"trait_type":"Head","value":"Pale"},{"trait_type":"Rarity Rank","value":3503,"display_type":"number"},{"trait_type":"TRON Points","value":6498,"display_type":"number"}]}}]}`)
+const getRandomNickname = () => {
+    const randomName = uniqueNamesGenerator({
+        dictionaries: [adjectives, colors, animals],
+        style: 'capital',
+        separator: ''
+    })
+
+    return randomName;
+}
+
+export const getProfileJSON = (tokenId) => {
+    const nickname = getRandomNickname();
+    return {
+        "tokenId":tokenId,
+        "name":`Dino #${tokenId}`,
+        "image":"https://bafybeibjcmfe7upvlhkhjhwnefag5iypce7kxmhxvtqz23c2v7xmytxfr4.ipfs.dweb.link/dino-nft.jpg",
+        "description":"A running dino to play Untittled Adventures",
+        "attributes":[
+            {"trait_type":"nickname","value":`${nickname}`},
+            {"trait_type":"type","value":"profile"},
+        ]
+    }
 }

@@ -1,17 +1,25 @@
 import axios from "axios";
 import TronWeb from "tronweb";
-import { REGISTRY_ABI, REGISTRY_CONTRACT_ADDRESS } from "../constants/registry";
-import { IMPLEMENTATION_ABI, IMPLEMENTATION_CONTRACT_ADDRESS } from "../constants/account";
+//import { REGISTRY_ABI, REGISTRY_CONTRACT_ADDRESS } from "../constants/registry";
+//import { IMPLEMENTATION_ABI, IMPLEMENTATION_CONTRACT_ADDRESS } from "../constants/account";
 import { getHostNetwork } from "./wallet";
 import { TOKENBOUND } from "../constants/tokenbound";
+import { getProfileJSON, pseudoRandId } from "../lib/myutils";
 
 
 function useTronWeb() {
-    const {trongridBaseAPI} = getHostNetwork(window.tronLink.tronWeb.fullNode.host)
-    return new TronWeb({
+    const {id, trongridBaseAPI} = getHostNetwork(window.tronLink.tronWeb.fullNode.host)
+    const options = {
         fullHost: trongridBaseAPI,
         privateKey: process.env.NEXT_PUBLIC_TRONGRID_PK        
-    });
+    }
+
+    if (id === "mainnet")
+        options.headers = { 
+            "TRON-PRO-API-KEY": process.env.NEXT_PUBLIC_TRONGRID_KEY 
+        };
+
+    return new TronWeb(options);
 }
 
 export async function getAccountInfo(address) {
@@ -288,8 +296,13 @@ export async function getEncodedFunctionData(
 }
 
 export async function tbaGetOwner(tbaAddress) {
+    const { id:networkId } = getHostNetwork(window.tronLink.tronWeb.fullNode.host);
+    const {
+        accountImplementationAbi,
+    } = TOKENBOUND[networkId];
+
     let tronWeb = useTronWeb();
-    const contract = await tronWeb.contract(IMPLEMENTATION_ABI, tbaAddress);
+    const contract = await tronWeb.contract(accountImplementationAbi, tbaAddress);
     try {
         const owner = await contract.owner().call();
         return tronWeb.address.fromHex(owner);
@@ -420,6 +433,74 @@ export async function mintTestNFT(userAddress, index) {
         // console.log(newMinter)
 
         // const tweb = window.tronLink.tronWeb;
+        const result = await contract
+            .mintWithTokenURI(userAddress, tokenId, tokenUri)
+            .send({
+                feeLimit: 100_000_000
+            });
+        return {
+            error: false,
+            result: "SUCCESS",
+            txid: result,
+            tokenId
+        }
+    } catch (error) {
+        console.log(error)
+        return {
+            error: true,
+			result: "MINTING_ERROR"
+        }
+    }
+}
+
+// Game Profile NFTs
+async function uploadJson(tokenId) {
+    const content = getProfileJSON(tokenId);
+
+    const JWT = process.env.NEXT_PUBLIC_PINATA_JWT;
+    const options = {
+        method: 'POST',
+        headers: {Authorization: `Bearer ${JWT}`, 'Content-Type': 'application/json'},
+        body: `{"pinataOptions":{"cidVersion":1},"pinataMetadata":{"name":"${pseudoRandId()}.json"},"pinataContent":${JSON.stringify(content)}}`
+    };
+
+    try {
+        const response = await fetch('https://api.pinata.cloud/pinning/pinJSONToIPFS', options);
+        const { IpfsHash } = await response.json();
+        const tokenUri = `https://${IpfsHash}.ipfs.dweb.link`;
+        console.log(tokenUri)
+        return tokenUri;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+export async function mintProfileNFT(userAddress) {
+    const { id } = getHostNetwork(window.tronLink.tronWeb.fullNode.host);
+    if (id !== "mainnet") return;
+
+    const contractAddressTKBA = "TJAvdn7NFKFxqsc6M4PZqecypSgxPBvkYy"
+
+    const tweb = window.tronLink.tronWeb;
+    const contract = await tweb.contract().at(contractAddressTKBA);
+    
+    const totalSupply = await contract.totalSupply().call();
+    const tokenId = parseInt(totalSupply) + 1;
+
+    const tokenUri = await uploadJson(tokenId)
+    if (tokenUri === null) {
+        return {
+            error: true,
+			result: "UPLOAD_ERROR"
+        }
+    }
+
+    try {
+        // let tronWeb = useTronWeb();
+        // const newMinter = await tronWeb.contract().at(addressTKBA).addMinter(userAddress).send({ feeLimit: 100_000_000 })
+        // console.log(newMinter)
+
         const result = await contract
             .mintWithTokenURI(userAddress, tokenId, tokenUri)
             .send({

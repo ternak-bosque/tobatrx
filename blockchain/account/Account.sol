@@ -29,7 +29,7 @@ interface IERC6551Executable {
         returns (bytes memory);
 }
 
-contract DemoTBAccount is IERC165, IERC1271, IERC6551Account, IERC6551Executable {
+contract TokenboundAccountV1 is IERC165, IERC1271, IERC6551Account, IERC6551Executable {
     uint256 public state;
 
     receive() external payable {}

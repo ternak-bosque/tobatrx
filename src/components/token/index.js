@@ -11,6 +11,7 @@ import {
     tbaGetAddress, 
     getNftOwner
 } from "@/src/service";
+import { getHostNetwork } from "@/src/service/wallet";
 
 const Token = ({ id }) => { 
     const { 
@@ -21,11 +22,15 @@ const Token = ({ id }) => {
     const [tokenAddress, tokenId] = id.split("_");
 
     const [tokenOwner, setTokenOwner] = useState(false);
-    const [accountBalance, setAccountBalance] = useState(0);
     const [accountDetail, setAccountDetail] = useState(null);
+    const [networkExplorer, setNetworkExplorer] = useState("");
 
     useEffect(() => {
         getExternalNftDetails();
+
+        // const {explorer} = getHostNetwork(window.tronLink.tronWeb.fullNode.host);
+        // console.log(explorer)
+        // setNetworkExplorer(explorer);
     }, [])
 
     async function getExternalNftDetails() {
@@ -36,25 +41,7 @@ const Token = ({ id }) => {
 
         const owner = await getNftOwner(tokenAddress, tokenId);
         setTokenOwner(owner);
-
-        // if (tba.isDeployed) {
-        //     setAccountData(tba.address);
-        // }
     }
-
-    // async function setAccountData(tbaAddress) {
-    //     const accountAssets = await getAccountTokensREST(tbaAddress);
-    //     const assetsData = accountAssets.data.map(o => formatAssetDataFromTronscan(o)).filter(t => t.address !== "_")
-    //     const _accountTokens = assetsData.filter(t => t.type === "FUNGIBLE_COMMON")
-
-    //     const { accountNfts } = await getAccountTokens(assetsData.map(({address}) => address), tbaAddress);
-    //     setAssets(_accountTokens);
-	// 	setCollectibles(accountNfts)
-	// 	console.log(_accountTokens, accountNfts)
-
-    //     const balance = accountAssets.data[0].quantity;
-    //     setAccountBalance(balance)
-	// }
 
     if (!accountDetail) {
         return (
@@ -68,7 +55,8 @@ const Token = ({ id }) => {
         <div className="lg:max-w-3xl mx-auto">
             <div className="p-3 rounded-md w-full">
                 <Header 
-                    data={accountDetail} 
+                    data={accountDetail}
+                    networkExplorer={walletInfo.network.explorer}
                     isTokenOwner={walletInfo.address === tokenOwner}
                 />
 
